@@ -24,9 +24,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Frontend
-app.use(express.static(path.resolve(__dirname, '../../frontend')));
-
 // Arquivos gerados
 app.use('/pdfs', express.static(path.resolve(__dirname, 'pdfs')));
 app.use('/comprovantes', express.static(path.resolve(__dirname, 'comprovantes')));
@@ -41,12 +38,16 @@ app.use('/', pedidoRoutes);
 app.use('/api/validacao', validacaoRoutes);
 app.use('/api/webhooks', webhookRoutes);
 
-// Rota principal
+// Rota raiz simples
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../frontend/index.html'));
+  res.json({
+    ok: true,
+    service: 'medflix-backend',
+    health: '/health'
+  });
 });
 
 // Start servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
